@@ -5,8 +5,24 @@ import morgan from "morgan";
 import productRoutes from "./api/routes/products.js"
 import orderRoutes from "./api/routes/orders.js"
 
+// Middlewares
 app.use(morgan('dev'))
+app.use(express.json())
 
+// CORS Error handling
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', "*")
+    res.header( "Access-Control-Allow-Headers", 
+                "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+
+    if(req.method === 'OPTIONS'){
+        res.header("Access-Control-Allow-Origin", "POST, PUT, DELETE, POST, GET")
+        return res.status(200).json({})
+    }
+    next(); 
+})
+
+// routes
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
 
